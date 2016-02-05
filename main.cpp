@@ -7,6 +7,7 @@
 // Main program file for homework 2a.
 #include "d_node.h"
 #include "Card.h"
+#include "Deck.h"
 
 using namespace std;
 //------------Global Operator Overloading---------------

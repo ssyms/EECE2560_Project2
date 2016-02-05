@@ -18,8 +18,15 @@ class Deck
 {
     public:
 
+      //default constructor
+      Deck();
+
     private:
 
+      //pointer to first card in deck
+      node <Card> *deckHead;
+
+//end of deck class
 }
 
 #endif

@@ -47,6 +47,8 @@ class Card
 
         //suit of card - spade, heart, club, diamond
         string suit;
+
+//end of card class
 };
 
 #endif

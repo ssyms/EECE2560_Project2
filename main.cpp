@@ -68,6 +68,17 @@ string Card::getSuit()
     return suit;
 }
 
+//-------------------Deck Class Functions----------------------
+
+
+Deck::Deck()
+//default constructor
+{
+    Card headCard("ace","club");
+    headDeck->nodeValue  = new node<Card> (headCard);
+    for(int i = 0; i <= 13; i++)
+}
+
 int main () {
 
   Card testCard;

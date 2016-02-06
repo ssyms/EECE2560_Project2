@@ -18,15 +18,21 @@ class Deck
 {
     public:
 
-      //default constructor
-      Deck();
+        //default constructor
+        Deck();
+
+        //shuffles the deck
+        void shuffle();
+
+        //getHeadDeck function retrieves the head of the deck
+        node<Card> *getHeadDeck();
 
     private:
 
-      //pointer to first card in deck
-      node <Card> *deckHead;
+        //pointer to first card in deck
+        node <Card> *headDeck;
 
 //end of deck class
-}
+};
 
 #endif

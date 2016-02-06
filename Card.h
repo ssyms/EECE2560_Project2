@@ -9,10 +9,8 @@
 #include <iostream>
 
 using namespace std;
-
 #ifndef Card_Card_h
 #define Card_Card_h
-
 
 class Card
 //Card class declaration
@@ -23,30 +21,30 @@ class Card
         Card();
 
         //constructor
-        Card(string newValue, string newSuit);
+        Card(int newValue, int newSuit);
 
         //set both values
-        void set(string newValue, string newSuit);
+        void set(int newValue, int newSuit);
 
         //set value function
-        void setValue(string newValue);
+        void setValue(int newValue);
 
         //set suit function
-        void setSuit(string newSuit);
+        void setSuit(int newSuit);
 
         //get value function
-        string getValue();
+        int getValue();
 
         //get suit
-        string getSuit();
+        int getSuit();
 
     private:
 
-        //value of the card (Ace - King)
-        string value;
+        //value of the card (Ace=1 - King=13)
+        int value;
 
-        //suit of card - spade, heart, club, diamond
-        string suit;
+        //suit of card - club=1, diamond=2, heart=3, spade=4,
+        int suit;
 
 //end of card class
 };

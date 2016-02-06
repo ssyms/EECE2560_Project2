@@ -17,8 +17,8 @@ using namespace std;
 ostream&  operator << (ostream & ostr, Card cardObj)
 //<< overload for the card class
 {
-    ostr << "(" << cardObj.getSuit() << ", ";
-    ostr << cardObj.getValue() << ")";
+    ostr << "(" << cardObj.getSuitString() << ", ";
+    ostr << cardObj.getValueString() << ")";
 
     return ostr;
 }
@@ -32,7 +32,7 @@ ostream&  operator << (ostream & ostr, Deck deckObj)
     for(int i = 0; i < 52; i++)
     //prints out each card
     {
-          if((i % 12) == 0)
+          if((i % 13) == 0)
           //if loop to split up lines
           {
               ostr << "\n";
@@ -43,7 +43,6 @@ ostream&  operator << (ostream & ostr, Deck deckObj)
 
     //end of for loop for print
     }
-    cout << "\n\nThe final card points to:" << currentNode;
 
     return ostr;
 
@@ -99,6 +98,73 @@ int Card::getSuit()
     return suit;
 }
 
+string Card::getValueString()
+//returns value of card as a string
+{
+  string stringValue;
+  switch(value)
+  //switches based on integer value
+  {
+    case 1: stringValue = "Ace";
+            break;
+    case 2: stringValue = "2";
+            break;
+    case 3: stringValue = "3";
+            break;
+    case 4: stringValue = "4";
+            break;
+    case 5: stringValue = "5";
+            break;
+    case 6: stringValue = "6";
+            break;
+    case 7: stringValue = "7";
+            break;
+    case 8: stringValue = "8";
+            break;
+    case 9: stringValue = "9";
+            break;
+    case 10: stringValue = "10";
+            break;
+    case 11: stringValue = "Jack";
+            break;
+    case 12: stringValue = "Queen";
+            break;
+    case 13: stringValue = "King";
+            break;
+
+  //switch statement to assign a string value
+  }
+
+  return stringValue;
+
+//end of get value string
+}
+
+string Card::getSuitString()
+//returns suit as a string
+{
+
+  string suitString;
+  switch(suit)
+  //switches based on suit value
+  {
+    case 1: suitString = "Club";
+            break;
+    case 2: suitString = "Diamond";
+            break;
+    case 3: suitString = "Heart";
+            break;
+    case 4: suitString = "Spade";
+            break;
+
+  //end of switch statement to assign suit
+  }
+
+  return suitString;
+
+//end of get suit string
+}
+
 //-------------------Deck Class Functions----------------------
 
 Deck::Deck()
@@ -124,10 +190,6 @@ Deck::Deck()
         }
 
     //end of for loop to set suit
-    }
-    cout << "currentCard:" << currentCard << "   currentCard->next:" << currentCard->next << endl;
-    if (currentCard->next == NULL){
-        cout << "It's True!!!" << endl;
     }
 
 //end of deck constructor
@@ -157,108 +219,102 @@ void Deck::shuffle()
         cardHolderLocation2 = headDeck;
         shuffleLocation1 = rand() % 52;
         shuffleLocation2 = rand() % 52;
-        if (shuffleLocation1 != shuffleLocation2 && abs(shuffleLocation2 - shuffleLocation1) > 2){
+        if (shuffleLocation1 != shuffleLocation2
+          && abs(shuffleLocation2 - shuffleLocation1) > 2)
+        //if we are not are at the location or 2 nodes from location
+        {
 
             for (int j = 0; j <= shuffleLocation1; j++)
-            //chooses random card
+            //chooses random card - goes to shufflesLocation1
             {
+
                 if (j == shuffleLocation1)
                 //if reached the random location in list
                 {
-                    for (int k = 0; k <= shuffleLocation2; k++){
 
-                        if (k == shuffleLocation2){
-                            if (shuffleLocation1 == 0){
+                    for (int k = 0; k <= shuffleLocation2; k++)
+                    //goes to shuffle location 2
+                    {
+
+                        if (k == shuffleLocation2)
+                        //if we're at shuffle location 2
+                        {
+                            if (shuffleLocation1 == 0)
+                            //swap two cards edge case - first card is head
+                            {
                                 cardHolderSwitch1 = cardHolderLocation1;
                                 headDeck = cardHolderLocation2;
-                                cardHolderLocation2Prev->next = cardHolderSwitch1;
+                                cardHolderLocation2Prev->next =
+                                    cardHolderSwitch1;
                                 cardHolderSwitch1 = cardHolderLocation1->next;
-                                cardHolderLocation1->next = cardHolderLocation2->next;
+                                cardHolderLocation1->next =
+                                    cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
-                            }else if (shuffleLocation2 == 0){
+                            //end of first card edge case
+                            }
+                            else if (shuffleLocation2 == 0)
+                            //swap two cards edge case - second card is head
+                            {
                                 cardHolderSwitch1 = cardHolderLocation2;
                                 headDeck = cardHolderLocation1;
-                                cardHolderLocation1Prev->next = cardHolderSwitch1;
+                                cardHolderLocation1Prev->next =
+                                    cardHolderSwitch1;
                                 cardHolderSwitch1 = cardHolderLocation2->next;
-                                cardHolderLocation2->next = cardHolderLocation1->next;
+                                cardHolderLocation2->next =
+                                    cardHolderLocation1->next;
                                 cardHolderLocation1->next = cardHolderSwitch1;
-                            } else {
-                                cardHolderSwitch1 = cardHolderLocation1;
-                                cardHolderLocation1Prev->next = cardHolderLocation2;
-                                cardHolderLocation2Prev->next = cardHolderSwitch1;
-                                cardHolderSwitch1 = cardHolderLocation1->next;
-                                cardHolderLocation1->next = cardHolderLocation2->next;
-                                cardHolderLocation2->next = cardHolderSwitch1;
+                            //end of second card edge case
                             }
-                        } else {
+                            else
+                            //otherwise swap the two cards
+                            {
+                                cardHolderSwitch1 = cardHolderLocation1;
+                                cardHolderLocation1Prev->next =
+                                    cardHolderLocation2;
+                                cardHolderLocation2Prev->next =
+                                    cardHolderSwitch1;
+                                cardHolderSwitch1 = cardHolderLocation1->next;
+                                cardHolderLocation1->next =
+                                    cardHolderLocation2->next;
+                                cardHolderLocation2->next = cardHolderSwitch1;
+                            //end of if statement to swap cards
+                            }
+
+                        //end of if statement for a shuffle location 2
+                        }
+                        else
+                        //if we are not at a swap location
+                        {
                             cardHolderLocation2Prev = cardHolderLocation2;
                             cardHolderLocation2 = cardHolderLocation2->next;
+                        //end of check if we are at shuffle location 2
                         }
+
+                    //end of for loop to get to shuffle location 2
                     }
-                } else {
+
+                //end of if we are at shuffle location 1 statement
+                }
+                else
+                //if we are not at shuffle location 1
+                {
                     cardHolderLocation1Prev = cardHolderLocation1;
                     cardHolderLocation1 = cardHolderLocation1->next;
+                //end of if we  are at shuffle location 1
                 }
+
+            //end of if statement for if we are at random card 1
             }
 
+        //end of for leap to reach random card 1
         }
+
+    //end of for loop to shuffle a random amount of times
     }
+
+//end of shuffle function
 }
-/*
-void Deck::shuffle()
-//shuffle function for deck class
-{
-      node<Card> *currentHead = headDeck;
-      node<Card> *currentNode = headDeck;
-      node<Card> *previousNode;
 
-      for(int i = 0; i < 52; i++)
-      //"shuffles" 52 times
-      {
-
-          int shuffles = rand() % 51;
-          for(int j = 0; j <= shuffles; j++)
-          //finds random node
-          {
-              if(j == (shuffles - 1))
-              //previous node to connect to next
-              {
-                    node<Card> *previousNode = currentNode;
-              }
-
-              if(j == shuffles)
-              //if we are at random node, random node re-inserted at beginning
-              {
-                  if(currentNode->next != NULL)
-                  {
-                    node<Card> *nextNode = currentNode->next;
-                    currentNode->next = currentHead;
-                    currentHead = currentNode;
-                    previousNode->next = nextNode;
-                  }
-                  else
-                  {
-                    currentNode->next = currentHead;
-                    currentHead = currentNode;
-                    previousNode->next = NULL;
-                  }
-
-              }
-              else
-              //if we have not reached the random node at shuffles
-              {
-
-                  currentNode = currentNode->next;
-              }
-
-          //has reached random node
-          }
-
-      //shuffles 52 times
-      }
-
-//end of shuffles functions
-}*/
 
 node<Card>* Deck::getHeadDeck()
 //returns head of the deck
@@ -270,7 +326,7 @@ node<Card>* Deck::getHeadDeck()
 int main ()
 //main function
 {
-    cout << "Clcok time: " << clock() << endl;
+    cout << "Clock time: " << clock() << endl;
     srand (time(NULL));   //Uses time to make rand more random
     clock_t t1,t2;
 
@@ -289,4 +345,6 @@ int main ()
     cout<< "\n\nRuntime of program: "<< seconds << " seconds" << endl;
 
     return 0;
+
+//end of main function
 }

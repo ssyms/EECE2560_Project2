@@ -38,6 +38,12 @@ class Card
         //get suit
         int getSuit();
 
+        //returns the value as a string
+        string getValueString();
+
+        //returns suit as a string
+        string getSuitString();
+
     private:
 
         //value of the card (Ace=1 - King=13)

@@ -1,3 +1,12 @@
+// d_node.h
+// Problem Set 2a                                 Chris Canal
+// Team cansym                                    canal.c@husky.neu.edu
+//                                                Sarada Symonds
+//                                                symonds.s@husky.neu.edu
+//
+// Node header file for homework 2a. Contains
+// declarations for the Node Class
+
 #ifndef NODE_CLASS
 #define NODE_CLASS
 
@@ -18,9 +27,11 @@ class node
       {}
 
       // constructor. initialize nodeValue and next
-      node(const T& item, node<T> *nextNode = NULL) : 
+      node(const T& item, node<T> *nextNode = NULL) :
 			  nodeValue(item), next(nextNode)
       {}
-};
+}; //end of node class
 
 #endif   // NODE_CLASS
+
+//end of node header file

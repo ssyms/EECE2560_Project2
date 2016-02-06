@@ -41,13 +41,11 @@ ostream&  operator << (ostream & ostr, Deck deckObj)
           cout << currentNode->nodeValue;
           currentNode = currentNode->next;
 
-    //end of for loop for print
-    }
+    } //end of for loop for print
 
     return ostr;
 
-//end of << overload for deck
-}
+} //end of << overload for deck
 
 //-------------------Card Class Functions----------------------
 
@@ -132,13 +130,11 @@ string Card::getValueString()
     case 13: stringValue = "King";
             break;
 
-  //switch statement to assign a string value
-  }
+  } //switch statement to assign a string value
 
   return stringValue;
 
-//end of get value string
-}
+} //end of get value string
 
 string Card::getSuitString()
 //returns suit as a string
@@ -157,13 +153,11 @@ string Card::getSuitString()
     case 4: suitString = "Spade";
             break;
 
-  //end of switch statement to assign suit
-  }
+  } //end of switch statement to assign suit
 
   return suitString;
 
-//end of get suit string
-}
+} //end of get suit string
 
 //-------------------Deck Class Functions----------------------
 
@@ -186,14 +180,11 @@ Deck::Deck()
                 currentCard = currentCard->next;
             }
 
-        //end of for loop to set values
-        }
+        } //end of for loop to set values
 
-    //end of for loop to set suit
-    }
+     } //end of for loop to set suit
 
-//end of deck constructor
-}
+} //end of deck constructor
 
 void Deck::shuffle()
 //shuffles the deck
@@ -250,8 +241,7 @@ void Deck::shuffle()
                                 cardHolderLocation1->next =
                                     cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
-                            //end of first card edge case
-                            }
+                            } //end of first card edge case
                             else if (shuffleLocation2 == 0)
                             //swap two cards edge case - second card is head
                             {
@@ -263,8 +253,7 @@ void Deck::shuffle()
                                 cardHolderLocation2->next =
                                     cardHolderLocation1->next;
                                 cardHolderLocation1->next = cardHolderSwitch1;
-                            //end of second card edge case
-                            }
+                            } //end of second card edge case
                             else
                             //otherwise swap the two cards
                             {
@@ -277,43 +266,33 @@ void Deck::shuffle()
                                 cardHolderLocation1->next =
                                     cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
-                            //end of if statement to swap cards
-                            }
+                            } //end of if statement to swap cards
 
-                        //end of if statement for a shuffle location 2
-                        }
+                        } //end of if statement for a shuffle location 2
                         else
                         //if we are not at a swap location
                         {
                             cardHolderLocation2Prev = cardHolderLocation2;
                             cardHolderLocation2 = cardHolderLocation2->next;
-                        //end of check if we are at shuffle location 2
-                        }
+                        } //end of check if we are at shuffle location 2
 
-                    //end of for loop to get to shuffle location 2
-                    }
+                    } //end of for loop to get to shuffle location 2
 
-                //end of if we are at shuffle location 1 statement
-                }
+                } //end of if we are at shuffle location 1 statement
                 else
                 //if we are not at shuffle location 1
                 {
                     cardHolderLocation1Prev = cardHolderLocation1;
                     cardHolderLocation1 = cardHolderLocation1->next;
-                //end of if we  are at shuffle location 1
-                }
+                } //end of if we  are at shuffle location 1
 
-            //end of if statement for if we are at random card 1
-            }
+            } //end of if statement for if we are at random card 1
 
-        //end of for leap to reach random card 1
-        }
+        } //end of for leap to reach random card 1
 
-    //end of for loop to shuffle a random amount of times
-    }
+    } //end of for loop to shuffle a random amount of times
 
-//end of shuffle function
-}
+} //end of shuffle function
 
 
 node<Card>* Deck::getHeadDeck()
@@ -346,5 +325,6 @@ int main ()
 
     return 0;
 
-//end of main function
-}
+} //end of main function
+
+//end of main file

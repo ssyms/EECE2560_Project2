@@ -52,7 +52,8 @@ class Card
         //suit of card - club=1, diamond=2, heart=3, spade=4,
         int suit;
 
-//end of card class
-};
+}; //end of card class
 
 #endif
+
+//end of card header file

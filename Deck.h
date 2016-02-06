@@ -5,7 +5,7 @@
 //                                                symonds.s@husky.neu.edu
 //
 // Deck header file for homework 2a. Contains
-// declarations for the Card Class
+// declarations for the Deck Class
 #include <iostream>
 
 using namespace std;
@@ -32,7 +32,8 @@ class Deck
         //pointer to first card in deck
         node <Card> *headDeck;
 
-//end of deck class
-};
+}; //end of deck class
 
-#endif
+#endif //Deck class
+
+//end of deck header file

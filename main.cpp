@@ -43,6 +43,7 @@ ostream&  operator << (ostream & ostr, Deck deckObj)
 
     //end of for loop for print
     }
+    cout << "\n\nThe final card points to:" << currentNode;
 
     return ostr;
 
@@ -113,14 +114,20 @@ Deck::Deck()
         for(int j = 1; j <= 13; j++)
         //goes through each value of cards
         {
-              Card nextCard(j, i);
-              currentCard->next = new node<Card> (nextCard);
-              currentCard = currentCard->next;
+            if (i != 1 || j != 1){
+                Card nextCard(j, i);
+                currentCard->next = new node<Card> (nextCard);
+                currentCard = currentCard->next;
+            }
 
         //end of for loop to set values
         }
 
     //end of for loop to set suit
+    }
+    cout << "currentCard:" << currentCard << "   currentCard->next:" << currentCard->next << endl;
+    if (currentCard->next == NULL){
+        cout << "It's True!!!" << endl;
     }
 
 //end of deck constructor
@@ -129,11 +136,12 @@ Deck::Deck()
 void Deck::shuffle()
 //shuffles the deck
 {
-    //that is in the range 1000 to 500
-    int shuffles = rand() % 1000 + 500;
+    //that is in the range fifty thousand to five million
+    int shuffles = rand() % 5000000 + 50000;
+    cout << "\n\nWe will shuffle the cards " << shuffles << " times!!" << endl;
     int shuffleLocation1;
     int shuffleLocation2;
-    node<Card>* cardHolderSwitch = headDeck;
+    node<Card>* cardHolderSwitch1 = headDeck;
     node<Card>* cardHolderLocation1Prev = headDeck;
     node<Card>* cardHolderLocation1 = headDeck;
     node<Card>* cardHolderLocation2Prev = headDeck;
@@ -142,39 +150,57 @@ void Deck::shuffle()
     for (int i = 0; i < shuffles; i++)
     //for loop to shuffle deck a random amount of times
     {
-        cardHolderSwitch = headDeck;
+        cardHolderSwitch1 = headDeck;
         cardHolderLocation1Prev = headDeck;
         cardHolderLocation1 = headDeck;
         cardHolderLocation2Prev = headDeck;
         cardHolderLocation2 = headDeck;
-        shuffleLocation1 = rand() % 51;
-        cout << "\nRandom number 1 is:" << shuffleLocation1 << endl;
-        shuffleLocation2 = rand() % 51;
-        cout << "\nRandom number 2 is:" << shuffleLocation2 << endl;
+        shuffleLocation1 = rand() % 52;
+        shuffleLocation2 = rand() % 52;
+        if (shuffleLocation1 != shuffleLocation2 && abs(shuffleLocation2 - shuffleLocation1) > 2){
 
-        for (int j = 0; j <= shuffleLocation1; j++)
-        //chooses random card
-        {
-            if (j == shuffleLocation1)
-            //if reached the random location in list
+            for (int j = 0; j <= shuffleLocation1; j++)
+            //chooses random card
             {
-                for (int k = 0; k <= shuffleLocation2; k++){
+                if (j == shuffleLocation1)
+                //if reached the random location in list
+                {
+                    for (int k = 0; k <= shuffleLocation2; k++){
 
-                    if (k == shuffleLocation2){
-                        cardHolderLocation1Prev->next = cardHolderLocation2;
-                        cardHolderLocation2Prev->next = cardHolderLocation1;
-                        cardHolderSwitch = cardHolderLocation1->next;
-                        cardHolderLocation1->next = cardHolderLocation2;
-                        cardHolderLocation2->next = cardHolderSwitch;
-                    } else {
-                        cardHolderLocation2Prev = cardHolderLocation2;
-                        cardHolderLocation2 = cardHolderLocation2->next;
+                        if (k == shuffleLocation2){
+                            if (shuffleLocation1 == 0){
+                                cardHolderSwitch1 = cardHolderLocation1;
+                                headDeck = cardHolderLocation2;
+                                cardHolderLocation2Prev->next = cardHolderSwitch1;
+                                cardHolderSwitch1 = cardHolderLocation1->next;
+                                cardHolderLocation1->next = cardHolderLocation2->next;
+                                cardHolderLocation2->next = cardHolderSwitch1;
+                            }else if (shuffleLocation2 == 0){
+                                cardHolderSwitch1 = cardHolderLocation2;
+                                headDeck = cardHolderLocation1;
+                                cardHolderLocation1Prev->next = cardHolderSwitch1;
+                                cardHolderSwitch1 = cardHolderLocation2->next;
+                                cardHolderLocation2->next = cardHolderLocation1->next;
+                                cardHolderLocation1->next = cardHolderSwitch1;
+                            } else {
+                                cardHolderSwitch1 = cardHolderLocation1;
+                                cardHolderLocation1Prev->next = cardHolderLocation2;
+                                cardHolderLocation2Prev->next = cardHolderSwitch1;
+                                cardHolderSwitch1 = cardHolderLocation1->next;
+                                cardHolderLocation1->next = cardHolderLocation2->next;
+                                cardHolderLocation2->next = cardHolderSwitch1;
+                            }
+                        } else {
+                            cardHolderLocation2Prev = cardHolderLocation2;
+                            cardHolderLocation2 = cardHolderLocation2->next;
+                        }
                     }
+                } else {
+                    cardHolderLocation1Prev = cardHolderLocation1;
+                    cardHolderLocation1 = cardHolderLocation1->next;
                 }
-            } else {
-                cardHolderLocation1Prev = cardHolderLocation1;
-                cardHolderLocation1 = cardHolderLocation1->next;
             }
+
         }
     }
 }
@@ -244,12 +270,23 @@ node<Card>* Deck::getHeadDeck()
 int main ()
 //main function
 {
+    cout << "Clcok time: " << clock() << endl;
     srand (time(NULL));   //Uses time to make rand more random
+    clock_t t1,t2;
 
-  Deck testDeck;
-  cout << testDeck;
-  testDeck.shuffle();
-  cout << testDeck;
+    t1=clock();
 
-  return 0;
+
+    Deck testDeck;
+    cout << testDeck;
+    testDeck.shuffle();
+    cout << testDeck;
+
+    t2=clock();
+    float diff = ((float)t2-(float)t1);
+
+    float seconds = diff / CLOCKS_PER_SEC;
+    cout<< "\n\nRuntime of program: "<< seconds << " seconds" << endl;
+
+    return 0;
 }

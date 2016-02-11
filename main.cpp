@@ -1,5 +1,5 @@
 // main.cpp
-// Problem Set 2a                                 Chris Canal
+// Problem Set 2b                                 Chris Canal
 // Team cansym                                    canal.c@husky.neu.edu
 //                                                Sarada Symonds
 //                                                symonds.s@husky.neu.edu
@@ -202,6 +202,20 @@ Deck::Deck()
      } //end of for loop to set suit
 
 } //end of deck constructor
+
+Deck::~Deck(){
+    if (headDeck->next == NULL)
+    {
+        delete headDeck;
+    }
+    else
+    {
+        node<Card>* tempNode = headDeck->next;
+        delete headDeck;
+        headDeck = tempNode;
+    }
+
+}
 
 void Deck::shuffle()
 //shuffles the deck

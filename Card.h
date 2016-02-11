@@ -1,5 +1,5 @@
 // Card.h
-// Problem Set 2a                                 Chris Canal
+// Problem Set 2b                                 Chris Canal
 // Team cansym                                    canal.c@husky.neu.edu
 //                                                Sarada Symonds
 //                                                symonds.s@husky.neu.edu

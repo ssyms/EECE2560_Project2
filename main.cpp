@@ -58,9 +58,15 @@ Card::Card()
 }
 
 Card::Card(int newValue, int newSuit)
-//Card constructor to set initial value and suit
+//card constructor to set initial value and suit
 {
     set(newValue, newSuit);
+}
+
+Card::Card(const Card &copyCard)
+//card copy constructor
+{
+    set(copyCard.getValue(), copyCard.getSuit());
 }
 
 
@@ -84,13 +90,13 @@ void Card::setValue(int newValue)
     value = newValue;
 }
 
-int Card::getValue()
+int Card::getValue() const
 //returns value of card
 {
     return value;
 }
 
-int Card::getSuit()
+int Card::getSuit() const
 //returns suit of card
 {
     return suit;
@@ -158,6 +164,17 @@ string Card::getSuitString()
   return suitString;
 
 } //end of get suit string
+
+Card& Card::operator= (Card &cardSource)
+//enables the = to assign an object of the card class
+{
+    // do the copy
+    value = cardSource.getValue();
+    suit = cardSource.getSuit();
+
+    // return the existing object
+    return *this;
+}
 
 //-------------------Deck Class Functions----------------------
 

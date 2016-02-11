@@ -20,8 +20,11 @@ class Card
         //default constructor
         Card();
 
-        //constructor
+        //constructor that sets the card value
         Card(int newValue, int newSuit);
+
+        //copy constructor
+        Card(const Card &copyCard);
 
         //set both values
         void set(int newValue, int newSuit);
@@ -33,16 +36,18 @@ class Card
         void setSuit(int newSuit);
 
         //get value function
-        int getValue();
+        int getValue() const;
 
         //get suit
-        int getSuit();
+        int getSuit() const;
 
         //returns the value as a string
         string getValueString();
 
         //returns suit as a string
         string getSuitString();
+
+        Card& operator= (Card &cardSource);
 
     private:
 

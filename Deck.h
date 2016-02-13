@@ -28,7 +28,11 @@ class Deck
         void shuffle();
 
         //getHeadDeck function retrieves the head of the deck
-        node<Card> *getHeadDeck();
+        node<Card> *getHeadDeck() const;
+
+        Card deal();
+
+        void replace(Card c);
 
     private:
 

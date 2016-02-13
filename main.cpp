@@ -13,39 +13,7 @@
 
 using namespace std;
 
-//------------Global Operator Overloading---------------
-ostream&  operator << (ostream & ostr, Card cardObj)
-//<< overload for the card class
-{
-    ostr << "(" << cardObj.getSuitString() << ", ";
-    ostr << cardObj.getValueString() << ")";
 
-    return ostr;
-}
-
-ostream&  operator << (ostream & ostr, Deck deckObj)
-//<< overload for deck class that prints each card in deck
-{
-    node<Card> *currentNode;
-    currentNode = deckObj.getHeadDeck();
-
-    for(int i = 0; i < 52; i++)
-    //prints out each card
-    {
-          if((i % 13) == 0)
-          //if loop to split up lines
-          {
-              ostr << "\n";
-          }
-
-          cout << currentNode->nodeValue;
-          currentNode = currentNode->next;
-
-    } //end of for loop for print
-
-    return ostr;
-
-} //end of << overload for deck
 
 //-------------------Card Class Functions----------------------
 
@@ -203,19 +171,20 @@ Deck::Deck()
 
 } //end of deck constructor
 
-Deck::~Deck(){
-    if (headDeck->next == NULL)
+Deck::~Deck()
+//destructor
+{
+    node<Card>* current = headDeck->next;
+    node<Card>* previous;
+    while(current != NULL)
     {
-        delete headDeck;
+        previous = current;
+        current = current -> next;
+        cout << "\nAddress of Deleted Card:" << previous;
+        delete previous;
     }
-    else
-    {
-        node<Card>* tempNode = headDeck->next;
-        delete headDeck;
-        headDeck = tempNode;
-    }
-
 }
+
 
 void Deck::shuffle()
 //shuffles the deck
@@ -322,14 +291,124 @@ void Deck::shuffle()
         } //end of for leap to reach random card 1
 
     } //end of for loop to shuffle a random amount of times
+    cout << "\nWE COMPLETED THE SHUFFLE" << endl;
 
 } //end of shuffle function
 
 
-node<Card>* Deck::getHeadDeck()
+node<Card>* Deck::getHeadDeck() const
 //returns head of the deck
 {
     return headDeck;
+}
+
+Card Deck::deal()
+//deals the top card and
+{
+    node<Card> *dealCard = headDeck;
+    headDeck = headDeck->next;
+    return dealCard->nodeValue;
+}
+
+void Deck::replace(Card c)
+//adds a new card to the bottom of the deck
+{
+    node<Card> *currentCard = headDeck;
+
+    while(currentCard->next != NULL)
+    //while loop moves to bottom of deck
+    {
+      currentCard = currentCard->next;
+    }
+
+    currentCard->next = new node<Card> (c);
+
+} //end of replace function
+
+
+//------------Global Operator Overloading---------------
+ostream&  operator << (ostream & ostr, Card cardObj)
+//<< overload for the card class
+{
+    ostr << "(" << cardObj.getSuitString() << ", ";
+    ostr << cardObj.getValueString() << ")";
+
+    return ostr;
+}
+
+ostream&  operator << (ostream & ostr, Deck const deckObj)
+//<< overload for deck class that prints each card in deck
+{
+    node<Card> *currentNode;
+    currentNode = new node<Card> (*(deckObj.getHeadDeck()));
+    int i = 0;
+    while(currentNode != NULL)
+    //prints out each card
+    {
+          if((i % 13) == 0)
+          //if loop to split up lines
+          {
+              ostr << "\n";
+          }
+
+          cout << currentNode->nodeValue;
+          currentNode = currentNode->next;
+          i++;
+
+    } //end of for loop for print
+
+    return ostr;
+
+} //end of << overload for deck
+
+
+//------------Global Functions--------------
+
+void playFlip()
+//plays the game flip
+{
+    Deck gameDeck;
+    int score = 0;
+
+    for(int i = 0; i < 3; i++)
+    //shuffles game deck three times
+    {
+      gameDeck.shuffle();
+    }
+
+    Card drawn[24];
+    node <Card> *playerDeck;
+    node <Card> *currentCard;
+    playerDeck = new node<Card> (gameDeck.deal());
+    playerDeck->next = currentCard;
+
+    for(int i = 0; i < 24; i++)
+    //draws 24 cards that are face down
+    {
+      currentCard = new node<Card> (gameDeck.deal());
+      currentCard->next = new node<Card> (gameDeck.deal());
+      currentCard = currentCard->next;
+    }
+
+
+
+
+    bool gameOn = true;
+    int cardNumber;
+    node<Card> *drawnCards;
+
+    while(gameOn)
+    //asks user to flip a card and adds to their score
+    {
+        cout << "Please pick a card number 0-23\n";
+
+        //Player picks a card
+        cin >> cardNumber;
+
+
+
+    }
+
 }
 
 //-----------------Main Function-------------------
@@ -344,7 +423,9 @@ int main ()
 
 
     Deck testDeck;
+    cout << "\nhere????";
     cout << testDeck;
+    cout << "\nDoes this get printed after delete?";
     testDeck.shuffle();
     cout << testDeck;
 
@@ -352,7 +433,15 @@ int main ()
     float diff = ((float)t2-(float)t1);
 
     float seconds = diff / CLOCKS_PER_SEC;
-    cout<< "\n\nRuntime of program: "<< seconds << " seconds" << endl;
+    cout << "\n\nRuntime of program: "<< seconds << " seconds" << endl;
+
+    Card drawn = testDeck.deal();
+    cout << drawn << "\n";
+    cout << testDeck;
+
+    testDeck.replace(drawn);
+    cout << "replaced deck\n" << testDeck;
+    cout << "\nHello the program ran";
 
     return 0;
 

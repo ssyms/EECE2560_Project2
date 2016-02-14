@@ -9,6 +9,7 @@
 #include "Card.h"
 #include "Deck.h"
 #include <iostream>
+#include <cstdlib>
 #include <time.h>    //for making rand() more random
 #include <vector>
 
@@ -151,7 +152,7 @@ Deck::Deck()
 //default constructor that creates a deck in order
 {
     Card headCard(1,1); //Set head card to Ace of Clubs
-    headDeck->nodeValue  =  new node<Card>* (headCard);
+    headDeck->nodeValue  =  headCard;
     node<Card> *currentCard;
     currentCard = headDeck;
     for(int i = 1; i <= 4; i++)
@@ -211,7 +212,7 @@ void Deck::shuffle()
 {
     //that is in the range fifty thousand to five million
     //int shuffles = rand() % 5000000 + 50000;
-    int shuffles = rand() % 500 + 50;
+    int shuffles = rand() % 5000000 + 50000;
     cout << "\n\nWe will shuffle the cards " << shuffles << " times!!" << endl;
     int shuffleLocation1;
     int shuffleLocation2;
@@ -235,8 +236,6 @@ void Deck::shuffle()
           && abs(shuffleLocation2 - shuffleLocation1) > 2)
         //if we are not are at the location or 2 nodes from location
         {
-            cout << "Yoloooooo" << endl;
-
             for (int j = 0; j <= shuffleLocation1; j++)
             //chooses random card - goes to shufflesLocation1
             {
@@ -435,11 +434,10 @@ int getPoints(Card c, int score)
     return valueScore;
 } // end of getPoints function
 
-void playFlip()
+void playFlip(Deck gameDeck)
 //plays the game flip
 {
     cout << "line before gameDeck\n";
-    Deck gameDeck;
 
     cout << "line after gamedeck\n";
 
@@ -557,7 +555,12 @@ int main ()
     clock_t t1,t2;
 
     t1=clock();
-    playFlip();
+
+    Deck testDeck;
+
+    cout << testDeck;
+
+    playFlip(testDeck);
 
     t2=clock();
     float diff = ((float)t2-(float)t1);

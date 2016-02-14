@@ -189,10 +189,10 @@ Deck::Deck(const Deck &deckCard)
     headDeck = new node<Card>;
     headDeck = deckCard.headDeck;
 }
-
 Deck::~Deck()
 //destructor
 {
+    /*
     node<Card>* current = headDeck->next;
     node<Card>* previous;
 
@@ -203,7 +203,7 @@ Deck::~Deck()
         current = current -> next;
         delete previous;
     }
-
+*/
 } //end of destructor
 
 
@@ -254,45 +254,32 @@ void Deck::shuffle()
                             if (shuffleLocation1 == 0)
                             //swap two cards edge case - first card is head
                             {
-                                /*
                                 cardHolderSwitch1 = cardHolderLocation1;
                                 headDeck = cardHolderLocation2;
-                                cardHolderLocation2Prev->next =
-                                    cardHolderSwitch1;
+                                cardHolderLocation2Prev->next = cardHolderSwitch1;
                                 cardHolderSwitch1 = cardHolderLocation1->next;
-                                cardHolderLocation1->next =
-                                    cardHolderLocation2->next;
+                                cardHolderLocation1->next = cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
-                                */
                             } //end of first card edge case
                             else if (shuffleLocation2 == 0)
                             //swap two cards edge case - second card is head
                             {
-                                /*
                                 cardHolderSwitch1 = cardHolderLocation2;
                                 headDeck = cardHolderLocation1;
-                                cardHolderLocation1Prev->next =
-                                    cardHolderSwitch1;
+                                cardHolderLocation1Prev->next = cardHolderSwitch1;
                                 cardHolderSwitch1 = cardHolderLocation2->next;
-                                cardHolderLocation2->next =
-                                    cardHolderLocation1->next;
+                                cardHolderLocation2->next = cardHolderLocation1->next;
                                 cardHolderLocation1->next = cardHolderSwitch1;
-                                */
                             } //end of second card edge case
                             else
                             //otherwise swap the two cards
                             {
-                                /*
                                 cardHolderSwitch1 = cardHolderLocation1;
-                                cardHolderLocation1Prev->next =
-                                    cardHolderLocation2;
-                                cardHolderLocation2Prev->next =
-                                    cardHolderSwitch1;
+                                cardHolderLocation1Prev->next = cardHolderLocation2;
+                                cardHolderLocation2Prev->next = cardHolderSwitch1;
                                 cardHolderSwitch1 = cardHolderLocation1->next;
-                                cardHolderLocation1->next =
-                                    cardHolderLocation2->next;
+                                cardHolderLocation1->next = cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
-                                */
                             } //end of if statement to swap cards
 
                         } //end of if statement for a shuffle location 2
@@ -336,9 +323,12 @@ node<Card> *Deck::getHeadDeck() const
 Card Deck::deal()
 //deals the top card and
 {
+    Card dealtCard;
     node<Card> *dealCard = headDeck;
     headDeck = headDeck->next;
-    return dealCard->nodeValue;
+    dealtCard = dealCard->nodeValue;
+    delete dealCard;
+    return dealtCard;
 }
 
 void Deck::replace(Card c)
@@ -396,52 +386,48 @@ ostream&  operator << (ostream & ostr, Deck const &deckObj)
 
 
 //------------Global Functions--------------
-int getPoints(Card c, int score)
+double getPoints(Card &c, double score)
 //returns the current score
 {
-    int valueScore = 0;
     switch(c.getValue())
     //switches based on value of the card
     {
-      case 1: valueScore = score + 10;
+      case 1: score += 10;
               break;
       case 11:
       case 12:
-      case 13: valueScore = score + 5;
+      case 13: score += 5;
               break;
       case 8:
       case 9:
-      case 10: valueScore = score;
+      case 10: score = score;
               break;
-      case 7: valueScore = score/2;
+      case 7: score = score/2;
               break;
       case 6:
       case 5:
       case 4:
       case 3:
-      case 2: valueScore = 0;
+      case 2: score = 0;
               break;
-      default: valueScore = score;
+      default: score = score;
               break;
     } // end of switch statement to assign valueScore
 
     if(c.getSuit() == 3)
     //adds bonus point if suit is a heart
     {
-      valueScore++;
+      score++;
     }
 
-    return valueScore;
+    return score;
 } // end of getPoints function
 
-void playFlip(Deck gameDeck)
+void playFlip(Deck &gameDeck)
 //plays the game flip
 {
-    cout << "line before gameDeck\n";
 
-    cout << "line after gamedeck\n";
-
-    int score = 0;
+    double score = 0.0;
     vector<int> guessVector;
     int userResponse;
     cout << "line 419\n";
@@ -450,9 +436,13 @@ void playFlip(Deck gameDeck)
     {
       gameDeck.shuffle();
       cout << "line 424\n";
+      cout << gameDeck;
     }
-/*
+
     node<Card> *playerDeck = new node<Card> (gameDeck.deal());
+    cout << "\nplayerDeck->next = " << playerDeck->next << endl;
+    cout << "\nplayerDeck = " << playerDeck << endl;
+    cout << "playerDeck node value: " << playerDeck->nodeValue << endl;
     node <Card> *currentCard;
     currentCard = playerDeck;
 
@@ -461,14 +451,21 @@ void playFlip(Deck gameDeck)
     for(int i = 0; i < 23; i++)
     //draws 24 cards that are face down
     {
+        cout << "\n______________________\nFor loop number " << i;
       currentCard->next = new node<Card> (gameDeck.deal());
+      cout << "\nCurrentCard->next = " << currentCard->next;
+      cout << "\nCurrentCard = " << currentCard;
+      cout << "\ncurrentCard->nodeValue = " << currentCard->nodeValue << endl;
       currentCard = currentCard->next;
+      cout << "\nCurrentCard->next = " << currentCard->next;
+      cout << "\nCurrentCard = " << currentCard << endl;
+
     }
 
     bool gameOn = true;
-    int cardNumber;
+    int cardNumber = -1;
     node<Card> *drawnCard;
-    node<Card> *thisCard;
+    node<Card> *thisCard = playerDeck;
 
     while(gameOn)
     //asks user to flip a card and adds to their score
@@ -540,7 +537,7 @@ void playFlip(Deck gameDeck)
             cout << "I didn't understand your input..." << endl;
             cout << "Oh well, lets play again!!!" << endl;
         }
-    }*/
+    }
 
 }
 

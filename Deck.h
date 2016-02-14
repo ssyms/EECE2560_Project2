@@ -24,6 +24,8 @@ class Deck
         //destructor of card worlds
         ~Deck();
 
+        Deck(const Deck &deckCard);
+
         //shuffles the deck
         void shuffle();
 
@@ -33,6 +35,9 @@ class Deck
         Card deal();
 
         void replace(Card c);
+
+
+        Deck& operator= (Deck &deckSource);
 
     private:
 

@@ -10,6 +10,8 @@
 #include "Deck.h"
 #include <iostream>
 #include <time.h>    //for making rand() more random
+#include <vector>
+
 
 using namespace std;
 
@@ -133,15 +135,14 @@ string Card::getSuitString()
 
 } //end of get suit string
 
-Card& Card::operator= (Card &cardSource)
+void Card::operator= (Card &cardSource)
 //enables the = to assign an object of the card class
 {
     // do the copy
-    value = cardSource.getValue();
-    suit = cardSource.getSuit();
+    value = cardSource.value;
+    suit = cardSource.suit;
 
-    // return the existing object
-    return *this;
+    // return the existing objec
 }
 
 //-------------------Deck Class Functions----------------------
@@ -150,7 +151,7 @@ Deck::Deck()
 //default constructor that creates a deck in order
 {
     Card headCard(1,1); //Set head card to Ace of Clubs
-    headDeck->nodeValue  = headCard;
+    headDeck->nodeValue  =  new node<Card>* (headCard);
     node<Card> *currentCard;
     currentCard = headDeck;
     for(int i = 1; i <= 4; i++)
@@ -171,26 +172,46 @@ Deck::Deck()
 
 } //end of deck constructor
 
+Deck& Deck::operator= (Deck &deckSource)
+//enables the = to assign an object of the card class
+{
+    // do the copy
+    headDeck = deckSource.getHeadDeck();
+
+    // return the existing object
+    return *this;
+}
+
+Deck::Deck(const Deck &deckCard)
+//card copy constructor
+{
+    headDeck = new node<Card>;
+    headDeck = deckCard.headDeck;
+}
+
 Deck::~Deck()
 //destructor
 {
     node<Card>* current = headDeck->next;
     node<Card>* previous;
+
     while(current != NULL)
+    //while there is a current node
     {
         previous = current;
         current = current -> next;
-        cout << "\nAddress of Deleted Card:" << previous;
         delete previous;
     }
-}
+
+} //end of destructor
 
 
 void Deck::shuffle()
 //shuffles the deck
 {
     //that is in the range fifty thousand to five million
-    int shuffles = rand() % 5000000 + 50000;
+    //int shuffles = rand() % 5000000 + 50000;
+    int shuffles = rand() % 500 + 50;
     cout << "\n\nWe will shuffle the cards " << shuffles << " times!!" << endl;
     int shuffleLocation1;
     int shuffleLocation2;
@@ -214,6 +235,7 @@ void Deck::shuffle()
           && abs(shuffleLocation2 - shuffleLocation1) > 2)
         //if we are not are at the location or 2 nodes from location
         {
+            cout << "Yoloooooo" << endl;
 
             for (int j = 0; j <= shuffleLocation1; j++)
             //chooses random card - goes to shufflesLocation1
@@ -233,6 +255,7 @@ void Deck::shuffle()
                             if (shuffleLocation1 == 0)
                             //swap two cards edge case - first card is head
                             {
+                                /*
                                 cardHolderSwitch1 = cardHolderLocation1;
                                 headDeck = cardHolderLocation2;
                                 cardHolderLocation2Prev->next =
@@ -241,10 +264,12 @@ void Deck::shuffle()
                                 cardHolderLocation1->next =
                                     cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
+                                */
                             } //end of first card edge case
                             else if (shuffleLocation2 == 0)
                             //swap two cards edge case - second card is head
                             {
+                                /*
                                 cardHolderSwitch1 = cardHolderLocation2;
                                 headDeck = cardHolderLocation1;
                                 cardHolderLocation1Prev->next =
@@ -253,10 +278,12 @@ void Deck::shuffle()
                                 cardHolderLocation2->next =
                                     cardHolderLocation1->next;
                                 cardHolderLocation1->next = cardHolderSwitch1;
+                                */
                             } //end of second card edge case
                             else
                             //otherwise swap the two cards
                             {
+                                /*
                                 cardHolderSwitch1 = cardHolderLocation1;
                                 cardHolderLocation1Prev->next =
                                     cardHolderLocation2;
@@ -266,6 +293,7 @@ void Deck::shuffle()
                                 cardHolderLocation1->next =
                                     cardHolderLocation2->next;
                                 cardHolderLocation2->next = cardHolderSwitch1;
+                                */
                             } //end of if statement to swap cards
 
                         } //end of if statement for a shuffle location 2
@@ -292,11 +320,15 @@ void Deck::shuffle()
 
     } //end of for loop to shuffle a random amount of times
     cout << "\nWE COMPLETED THE SHUFFLE" << endl;
-
+    cardHolderSwitch1 = NULL;
+    cardHolderLocation1Prev = NULL;
+    cardHolderLocation1 = NULL;
+    cardHolderLocation2Prev = NULL;
+    cardHolderLocation2 = NULL;
 } //end of shuffle function
 
 
-node<Card>* Deck::getHeadDeck() const
+node<Card> *Deck::getHeadDeck() const
 //returns head of the deck
 {
     return headDeck;
@@ -336,7 +368,8 @@ ostream&  operator << (ostream & ostr, Card cardObj)
     return ostr;
 }
 
-ostream&  operator << (ostream & ostr, Deck const deckObj)
+
+ostream&  operator << (ostream & ostr, Deck const &deckObj)
 //<< overload for deck class that prints each card in deck
 {
     node<Card> *currentNode;
@@ -362,54 +395,158 @@ ostream&  operator << (ostream & ostr, Deck const deckObj)
 } //end of << overload for deck
 
 
+
 //------------Global Functions--------------
+int getPoints(Card c, int score)
+//returns the current score
+{
+    int valueScore = 0;
+    switch(c.getValue())
+    //switches based on value of the card
+    {
+      case 1: valueScore = score + 10;
+              break;
+      case 11:
+      case 12:
+      case 13: valueScore = score + 5;
+              break;
+      case 8:
+      case 9:
+      case 10: valueScore = score;
+              break;
+      case 7: valueScore = score/2;
+              break;
+      case 6:
+      case 5:
+      case 4:
+      case 3:
+      case 2: valueScore = 0;
+              break;
+      default: valueScore = score;
+              break;
+    } // end of switch statement to assign valueScore
+
+    if(c.getSuit() == 3)
+    //adds bonus point if suit is a heart
+    {
+      valueScore++;
+    }
+
+    return valueScore;
+} // end of getPoints function
 
 void playFlip()
 //plays the game flip
 {
+    cout << "line before gameDeck\n";
     Deck gameDeck;
-    int score = 0;
 
+    cout << "line after gamedeck\n";
+
+    int score = 0;
+    vector<int> guessVector;
+    int userResponse;
+    cout << "line 419\n";
     for(int i = 0; i < 3; i++)
     //shuffles game deck three times
     {
       gameDeck.shuffle();
+      cout << "line 424\n";
     }
-
-    Card drawn[24];
-    node <Card> *playerDeck;
+/*
+    node<Card> *playerDeck = new node<Card> (gameDeck.deal());
     node <Card> *currentCard;
-    playerDeck = new node<Card> (gameDeck.deal());
-    playerDeck->next = currentCard;
+    currentCard = playerDeck;
 
-    for(int i = 0; i < 24; i++)
+    cout << "line 431\n";
+
+    for(int i = 0; i < 23; i++)
     //draws 24 cards that are face down
     {
-      currentCard = new node<Card> (gameDeck.deal());
       currentCard->next = new node<Card> (gameDeck.deal());
       currentCard = currentCard->next;
     }
 
-
-
-
     bool gameOn = true;
     int cardNumber;
-    node<Card> *drawnCards;
+    node<Card> *drawnCard;
+    node<Card> *thisCard;
 
     while(gameOn)
     //asks user to flip a card and adds to their score
     {
-        cout << "Please pick a card number 0-23\n";
+        while (cardNumber == -1)
+        //while cardNumber is not valid
+        {
+            cout << "Please pick a card number 0-23\n";
 
-        //Player picks a card
-        cin >> cardNumber;
+            //Player picks a card
+            cin >> cardNumber;
+
+            if (cardNumber > 23 || cardNumber < 0)
+            //if card entered is outside range of the player deck
+            {
+                cout << "invalid choice!!!" << endl;
+                cardNumber = -1;
+            }
+            else
+            //if card is in player deck range
+            {
+                for (int i = 0; i < guessVector.size(); i++)
+                //goes through chosen card numbers
+                {
+                    if (cardNumber ==  guessVector[i])
+                    //checks if card was chosen
+                    {
+                        cout << "You have already choosen that card." << endl;
+                        cout << "Remeber?" << endl;
+                        cardNumber = -1;
+                    }
+                }
+            }
+
+        }
+
+        cout << "You chose card number: " << cardNumber << "\n";
+
+        for(int i = 0; i <= cardNumber; i++)
+        //get to drawn cardNumber
+        {
+          if(i == cardNumber)
+          //if it is the card that was drawn
+          {
+            cout << thisCard->nodeValue;
+            drawnCard = thisCard;
+          }
+          thisCard = thisCard->next;
+        }
+        score = getPoints(drawnCard->nodeValue, score);
+        guessVector.push_back(cardNumber);
+        cardNumber = -1;
 
 
+        cout << "Your current score is " << score << endl;
+        cout << "\nWould you like to keep playing? (1 for yes, 2 for no)" << endl;
+        cin >> userResponse;
 
-    }
+        if (userResponse == 1){
+            cout << "\nGreat! Lets play some more!" << endl;
+
+        } else if (userResponse == 2){
+            cout << "\nYour final score was " << score << endl;
+            cout << "\nI hope you learned your lesson... Gambling is bad!\n";
+            cout << "\nThanks for playing! Have an awesome day!" << endl;
+            gameOn = false;
+
+        } else {
+            cout << "I didn't understand your input..." << endl;
+            cout << "Oh well, lets play again!!!" << endl;
+        }
+    }*/
 
 }
+
+
 
 //-----------------Main Function-------------------
 int main ()
@@ -420,28 +557,13 @@ int main ()
     clock_t t1,t2;
 
     t1=clock();
-
-
-    Deck testDeck;
-    cout << "\nhere????";
-    cout << testDeck;
-    cout << "\nDoes this get printed after delete?";
-    testDeck.shuffle();
-    cout << testDeck;
+    playFlip();
 
     t2=clock();
     float diff = ((float)t2-(float)t1);
 
     float seconds = diff / CLOCKS_PER_SEC;
     cout << "\n\nRuntime of program: "<< seconds << " seconds" << endl;
-
-    Card drawn = testDeck.deal();
-    cout << drawn << "\n";
-    cout << testDeck;
-
-    testDeck.replace(drawn);
-    cout << "replaced deck\n" << testDeck;
-    cout << "\nHello the program ran";
 
     return 0;
 

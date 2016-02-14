@@ -47,7 +47,7 @@ class Card
         //returns suit as a string
         string getSuitString();
 
-        Card& operator= (Card &cardSource);
+        void operator= (Card &cardSource);
 
     private:
 

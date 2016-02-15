@@ -152,7 +152,10 @@ Deck::Deck()
 //default constructor that creates a deck in order
 {
     Card headCard(1,1); //Set head card to Ace of Clubs
-    headDeck->nodeValue  =  headCard;
+    node<Card> *firstCard;
+    firstCard = new node<Card> (headCard);
+    headDeck = firstCard;
+
     node<Card> *currentCard;
     currentCard = headDeck;
     for(int i = 1; i <= 4; i++)
@@ -212,7 +215,7 @@ void Deck::shuffle()
 {
     //that is in the range fifty thousand to five million
     //int shuffles = rand() % 5000000 + 50000;
-    int shuffles = rand() % 5000000 + 50000;
+    int shuffles = rand() % 500 + 50;
     cout << "\n\nWe will shuffle the cards " << shuffles << " times!!" << endl;
     int shuffleLocation1;
     int shuffleLocation2;
@@ -327,7 +330,9 @@ Card Deck::deal()
     node<Card> *dealCard = headDeck;
     headDeck = headDeck->next;
     dealtCard = dealCard->nodeValue;
+    cout << "\nThe code gets here";
     delete dealCard;
+    cout << "\nThe code gets here2";
     return dealtCard;
 }
 
@@ -431,6 +436,7 @@ void playFlip(Deck &gameDeck)
     vector<int> guessVector;
     int userResponse;
     cout << "line 419\n";
+    /*
     for(int i = 0; i < 3; i++)
     //shuffles game deck three times
     {
@@ -438,6 +444,7 @@ void playFlip(Deck &gameDeck)
       cout << "line 424\n";
       cout << gameDeck;
     }
+    */
 
     node<Card> *playerDeck = new node<Card> (gameDeck.deal());
     cout << "\nplayerDeck->next = " << playerDeck->next << endl;
@@ -452,20 +459,26 @@ void playFlip(Deck &gameDeck)
     //draws 24 cards that are face down
     {
         cout << "\n______________________\nFor loop number " << i;
-      currentCard->next = new node<Card> (gameDeck.deal());
-      cout << "\nCurrentCard->next = " << currentCard->next;
-      cout << "\nCurrentCard = " << currentCard;
-      cout << "\ncurrentCard->nodeValue = " << currentCard->nodeValue << endl;
-      currentCard = currentCard->next;
-      cout << "\nCurrentCard->next = " << currentCard->next;
-      cout << "\nCurrentCard = " << currentCard << endl;
+        currentCard->next = new node<Card> (gameDeck.deal());
 
+        cout << "\nCurrentCard->next = " << currentCard->next;
+        cout << "\nCurrentCard = " << currentCard;
+        cout << "\ncurrentCard->nodeValue = " << currentCard->nodeValue << endl;
+        cout << "\nThe code gets here3";
+        cout << "\nThe code gets here4";
+        if (i != 22){
+            cout << "\nThe code gets here5";
+            currentCard = currentCard->next;
+        }
+        cout << "\nThe code gets here6";
     }
-
+    cout << "What is goint on here!";
     bool gameOn = true;
     int cardNumber = -1;
     node<Card> *drawnCard;
+    cout << "line 468 happens";
     node<Card> *thisCard = playerDeck;
+    cout << "line 470 happens";
 
     while(gameOn)
     //asks user to flip a card and adds to their score
@@ -473,6 +486,29 @@ void playFlip(Deck &gameDeck)
         while (cardNumber == -1)
         //while cardNumber is not valid
         {
+            thisCard = playerDeck;
+            cout << "These are the cards you have not choosen: (";
+            for (int i = 0; i < 24; i++)
+            //goes through chosen card numbers
+            {
+                if (i != 23){
+                    if (i !=  guessVector[i])
+                    //checks if card was chosen
+                    {
+                        cout << i << " , ";
+                    } else {
+                        cout << "- , ";
+                    }
+                } else {
+                    if (i !=  guessVector[i])
+                    //checks if card was chosen
+                    {
+                        cout << i << " )\n";
+                    } else {
+                        cout << "- )\n";
+                    }
+                }
+            }
             cout << "Please pick a card number 0-23\n";
 
             //Player picks a card
@@ -496,6 +532,7 @@ void playFlip(Deck &gameDeck)
                         cout << "You have already choosen that card." << endl;
                         cout << "Remeber?" << endl;
                         cardNumber = -1;
+                        i = guessVector.size();
                     }
                 }
             }

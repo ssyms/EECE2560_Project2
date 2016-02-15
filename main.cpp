@@ -14,7 +14,7 @@
 #include <vector>
 
 
-using namespace std;
+// using namespace std;
 
 
 
@@ -176,11 +176,14 @@ Deck::Deck()
 
 } //end of deck constructor
 
-void Deck::operator= (Deck &deckSource)
+Deck& Deck::operator= (Deck &deckSource)
 //enables the = to assign an object of the card class
 {
     // do the copy
     headDeck = deckSource.getHeadDeck();
+
+    // return the existing object
+    return *this;
 }
 
 Deck::Deck(const Deck &deckCard)
@@ -213,7 +216,8 @@ void Deck::shuffle()
     //that is in the range fifty thousand to five million
     //int shuffles = rand() % 5000000 + 50000;
     int shuffles = rand() % 500 + 50;
-    cout << "\n\nWe will shuffle the cards " << shuffles << " times!!" << endl;
+    std::cout << "\n\nWe will shuffle the cards " << shuffles 
+              << " times!!" << std::endl;
     int shuffleLocation1;
     int shuffleLocation2;
     node<Card>* cardHolderSwitch1 = headDeck;
@@ -305,7 +309,7 @@ void Deck::shuffle()
         } //end of for leap to reach random card 1
 
     } //end of for loop to shuffle a random amount of times
-    cout << "\nWE COMPLETED THE SHUFFLE" << endl;
+    std::cout << "\nWE COMPLETED THE SHUFFLE" << std::endl;
     cardHolderSwitch1 = NULL;
     cardHolderLocation1Prev = NULL;
     cardHolderLocation1 = NULL;
@@ -327,9 +331,9 @@ Card Deck::deal()
     node<Card> *dealCard = headDeck;
     headDeck = headDeck->next;
     dealtCard = dealCard->nodeValue;
-    cout << "\nThe code gets here";
+    std::cout << "\nThe code gets here";
     delete dealCard;
-    cout << "\nThe code gets here2";
+    std::cout << "\nThe code gets here2";
     return dealtCard;
 }
 
@@ -375,7 +379,7 @@ ostream&  operator << (ostream & ostr, Deck const &deckObj)
               ostr << "\n";
           }
 
-          cout << currentNode->nodeValue;
+          std::cout << currentNode->nodeValue;
           currentNode = currentNode->next;
           i++;
 
@@ -431,46 +435,55 @@ void playFlip(Deck &gameDeck)
 
     double score = 0.0;
     vector<int> guessVector;
+    guessVector.resize(24);
     int userResponse;
-    cout << "line 419\n";
+    std::cout << "line 419\n";
     /*
     for(int i = 0; i < 3; i++)
     //shuffles game deck three times
     {
       gameDeck.shuffle();
-      cout << "line 424\n";
-      cout << gameDeck;
+      std::cout << "line 424\n";
+      std::cout << gameDeck;
     }
     */
 
     node<Card> *playerDeck = new node<Card> (gameDeck.deal());
-    cout << "\nplayerDeck->next = " << playerDeck->next << endl;
-    cout << "\nplayerDeck = " << playerDeck << endl;
-    cout << "playerDeck node value: " << playerDeck->nodeValue << endl;
+    std::cout << "\nplayerDeck->next = " << playerDeck->next << std::endl;
+    std::cout << "\nplayerDeck = " << playerDeck << std::endl;
+    std::cout << "playerDeck node value: " << playerDeck->nodeValue << std::endl;
     node <Card> *currentCard;
     currentCard = playerDeck;
 
-    cout << "line 431\n";
+    std::cout << "line 431\n";
 
-    for(int q = 0; q < 23; q++)
+    for(int i = 0; i < 23; i++)
     //draws 24 cards that are face down
     {
-        cout << "\n______________________\nFor loop number " << q;
+        std::cout << "\n______________________\nFor loop number " << i;
         currentCard->next = new node<Card> (gameDeck.deal());
-        if (currentCard->next != NULL)
-        //while loop moves to bottom of deck
-        {
-          currentCard = currentCard->next;
+
+        std::cout << "\nCurrentCard->next = " << currentCard->next;
+        std::cout << "\nCurrentCard = " << currentCard;
+        std::cout << "\ncurrentCard->nodeValue = " << currentCard->nodeValue << std::endl;
+        std::cout << "\nThe code gets here3";
+        std::cout << "\nThe code gets here4";
+        if (i != 22){
+            std::cout << "\nThe code gets here5";
+            if(currentCard)
+                currentCard = currentCard->next;
         }
-        cout << "\nThe code gets here3";
+        std::cout << "\nThe code gets here6";
     }
-    cout << "What is goint on here!";
+    std::cout << "What is goint on here!";
     bool gameOn = true;
     int cardNumber = -1;
     node<Card> *drawnCard;
-    cout << "line 468 happens";
+    std::cout << "line 468 happens";
     node<Card> *thisCard = playerDeck;
-    cout << "line 470 happens";
+    std::cout << "line 470 happens";
+
+    guessVector.push_back(cardNumber);
 
     while(gameOn)
     //asks user to flip a card and adds to their score
@@ -479,7 +492,7 @@ void playFlip(Deck &gameDeck)
         //while cardNumber is not valid
         {
             thisCard = playerDeck;
-            cout << "These are the cards you have not choosen: (";
+            std::cout << "These are the cards you have not choosen: (";
             for (int i = 0; i < 24; i++)
             //goes through chosen card numbers
             {
@@ -487,21 +500,21 @@ void playFlip(Deck &gameDeck)
                     if (i !=  guessVector[i])
                     //checks if card was chosen
                     {
-                        cout << i << " , ";
+                        std::cout << i << " , ";
                     } else {
-                        cout << "- , ";
+                        std::cout << "- , ";
                     }
                 } else {
                     if (i !=  guessVector[i])
                     //checks if card was chosen
                     {
-                        cout << i << " )\n";
+                        std::cout << i << " )\n";
                     } else {
-                        cout << "- )\n";
+                        std::cout << "- )\n";
                     }
                 }
             }
-            cout << "Please pick a card number 0-23\n";
+            std::cout << "Please pick a card number 0-23\n";
 
             //Player picks a card
             cin >> cardNumber;
@@ -509,7 +522,7 @@ void playFlip(Deck &gameDeck)
             if (cardNumber > 23 || cardNumber < 0)
             //if card entered is outside range of the player deck
             {
-                cout << "invalid choice!!!" << endl;
+                std::cout << "invalid choice!!!" << std::endl;
                 cardNumber = -1;
             }
             else
@@ -521,8 +534,8 @@ void playFlip(Deck &gameDeck)
                     if (cardNumber ==  guessVector[i])
                     //checks if card was chosen
                     {
-                        cout << "You have already choosen that card." << endl;
-                        cout << "Remeber?" << endl;
+                        std::cout << "You have already choosen that card." << std::endl;
+                        std::cout << "Remeber?" << std::endl;
                         cardNumber = -1;
                         i = guessVector.size();
                     }
@@ -531,7 +544,7 @@ void playFlip(Deck &gameDeck)
 
         }
 
-        cout << "You chose card number: " << cardNumber << "\n";
+        std::cout << "You chose card number: " << cardNumber << "\n";
 
         for(int i = 0; i <= cardNumber; i++)
         //get to drawn cardNumber
@@ -539,7 +552,8 @@ void playFlip(Deck &gameDeck)
           if(i == cardNumber)
           //if it is the card that was drawn
           {
-            cout << thisCard->nodeValue;
+            std::cout << "thisCard Drawn:" << std::endl;
+            std::cout << thisCard->nodeValue;
             drawnCard = thisCard;
           }
           thisCard = thisCard->next;
@@ -549,22 +563,22 @@ void playFlip(Deck &gameDeck)
         cardNumber = -1;
 
 
-        cout << "Your current score is " << score << endl;
-        cout << "\nWould you like to keep playing? (1 for yes, 2 for no)" << endl;
+        std::cout << "Your current score is " << score << std::endl;
+        std::cout << "\nWould you like to keep playing? (1 for yes, 2 for no)" << std::endl;
         cin >> userResponse;
 
         if (userResponse == 1){
-            cout << "\nGreat! Lets play some more!" << endl;
+            std::cout << "\nGreat! Lets play some more!" << std::endl;
 
         } else if (userResponse == 2){
-            cout << "\nYour final score was " << score << endl;
-            cout << "\nI hope you learned your lesson... Gambling is bad!\n";
-            cout << "\nThanks for playing! Have an awesome day!" << endl;
+            std::cout << "\nYour final score was " << score << std::endl;
+            std::cout << "\nI hope you learned your lesson... Gambling is bad!\n";
+            std::cout << "\nThanks for playing! Have an awesome day!" << std::endl;
             gameOn = false;
 
         } else {
-            cout << "I didn't understand your input..." << endl;
-            cout << "Oh well, lets play again!!!" << endl;
+            std::cout << "I didn't understand your input..." << std::endl;
+            std::cout << "Oh well, lets play again!!!" << std::endl;
         }
     }
 
@@ -576,25 +590,23 @@ void playFlip(Deck &gameDeck)
 int main ()
 //main function
 {
-    /*
-    cout << "Clock time: " << clock() << endl;
+    std::cout << "Clock time: " << clock() << std::endl;
     srand (time(NULL));   //Uses time to make rand more random
     clock_t t1,t2;
 
     t1=clock();
 
-*/
     Deck testDeck;
 
-    cout << testDeck;
+    std::cout << testDeck;
 
     playFlip(testDeck);
 
-//    t2=clock();
-//    float diff = ((float)t2-(float)t1);
+    t2=clock();
+    float diff = ((float)t2-(float)t1);
 
-//    float seconds = diff / CLOCKS_PER_SEC;
-//    cout << "\n\nRuntime of program: "<< seconds << " seconds" << endl;
+    float seconds = diff / CLOCKS_PER_SEC;
+    std::cout << "\n\nRuntime of program: "<< seconds << " seconds" << std::endl;
 
     return 0;
 

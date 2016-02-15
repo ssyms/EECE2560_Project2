@@ -176,14 +176,11 @@ Deck::Deck()
 
 } //end of deck constructor
 
-Deck& Deck::operator= (Deck &deckSource)
+void Deck::operator= (Deck &deckSource)
 //enables the = to assign an object of the card class
 {
     // do the copy
     headDeck = deckSource.getHeadDeck();
-
-    // return the existing object
-    return *this;
 }
 
 Deck::Deck(const Deck &deckCard)
@@ -455,22 +452,17 @@ void playFlip(Deck &gameDeck)
 
     cout << "line 431\n";
 
-    for(int i = 0; i < 23; i++)
+    for(int q = 0; q < 23; q++)
     //draws 24 cards that are face down
     {
-        cout << "\n______________________\nFor loop number " << i;
+        cout << "\n______________________\nFor loop number " << q;
         currentCard->next = new node<Card> (gameDeck.deal());
-
-        cout << "\nCurrentCard->next = " << currentCard->next;
-        cout << "\nCurrentCard = " << currentCard;
-        cout << "\ncurrentCard->nodeValue = " << currentCard->nodeValue << endl;
-        cout << "\nThe code gets here3";
-        cout << "\nThe code gets here4";
-        if (i != 22){
-            cout << "\nThe code gets here5";
-            currentCard = currentCard->next;
+        if (currentCard->next != NULL)
+        //while loop moves to bottom of deck
+        {
+          currentCard = currentCard->next;
         }
-        cout << "\nThe code gets here6";
+        cout << "\nThe code gets here3";
     }
     cout << "What is goint on here!";
     bool gameOn = true;
@@ -584,23 +576,25 @@ void playFlip(Deck &gameDeck)
 int main ()
 //main function
 {
+    /*
     cout << "Clock time: " << clock() << endl;
     srand (time(NULL));   //Uses time to make rand more random
     clock_t t1,t2;
 
     t1=clock();
 
+*/
     Deck testDeck;
 
     cout << testDeck;
 
     playFlip(testDeck);
 
-    t2=clock();
-    float diff = ((float)t2-(float)t1);
+//    t2=clock();
+//    float diff = ((float)t2-(float)t1);
 
-    float seconds = diff / CLOCKS_PER_SEC;
-    cout << "\n\nRuntime of program: "<< seconds << " seconds" << endl;
+//    float seconds = diff / CLOCKS_PER_SEC;
+//    cout << "\n\nRuntime of program: "<< seconds << " seconds" << endl;
 
     return 0;
 

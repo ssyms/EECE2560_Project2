@@ -37,7 +37,7 @@ class Deck
         void replace(Card c);
 
 
-        Deck& operator= (Deck &deckSource);
+        void operator= (Deck &deckSource);
 
     private:
 
